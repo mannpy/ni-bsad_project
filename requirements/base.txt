@@ -1,1 +1,4 @@
 Django==1.11.8
+django-crispy-forms==1.7.0
+pytz==2017.3
+Unidecode==0.4.21

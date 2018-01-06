@@ -1,0 +1,98 @@
+*::-webkit-input-placeholder {
+	color: #666;
+	opacity: 1;
+}
+*:-moz-placeholder {
+	color: #666;
+	opacity: 1;
+}
+*::-moz-placeholder {
+	color: #666;
+	opacity: 1;
+}
+*:-ms-input-placeholder {
+	color: #666;
+	opacity: 1;
+}
+
+body input:focus:required:invalid,
+body textarea:focus:required:invalid {
+
+}
+body input:required:valid,
+body textarea:required:valid {
+
+}
+body {
+	font-family: "RobotoRegular", sans-serif;
+	font-size: 16px;
+}
+
+
+hr {
+	margin-top: 0;
+	margin-bottom: 10px;
+	border-top: 1px solid #d8f8f3;
+}
+
+p {
+	margin: 0;
+}
+
+.nav {
+	height: 50px;
+	background-color: #26a69a;
+	margin-bottom: 20px;
+}
+
+.nav ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-align: center;
+	float: left;
+}
+
+.nav ul li {
+	display: inline-block;
+}
+
+.nav li a {
+	text-decoration: none;
+	padding: 12px;
+	color: #fff;
+	display: block;
+}
+
+.nav ul li a:hover {
+	color: #CFD8DC;
+	}
+
+.blue {
+	color: #01579B;
+}
+
+.grey {
+	color: #757575;
+}
+
+.box, .box-border {
+	display: inline-block;
+	font-size: 14px;
+	padding: 3px;
+	margin: 1px;
+	width:45px;
+
+}
+
+.box-border {
+	border:1px solid silver;
+}
+
+.margin-bottom-10 {
+	padding-bottom: 10px;
+}
+
+.font-size-14 {
+	font-size: 14px;
+}

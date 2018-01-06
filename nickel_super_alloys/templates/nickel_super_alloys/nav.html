@@ -1,0 +1,10 @@
+<div class="nav">
+    <div class="container">
+        <ul>
+         {% if user.is_authenticated %}
+             <li><a href="{% url 'admin:index' %}">Администрирование</a></li>
+         {% endif %}
+            <li><a href="{% url 'alloys:index' %}">Сплавы</a></li>
+        </ul>
+    </div>
+</div>

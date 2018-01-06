@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "nickel_super_alloys/nav.html" %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="Сплав:">
+        </div>
+        <div class="col-md-9">
+            <p class="grey">Всего сплавов: {{ alloys.count }}</p>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Марка сплава</th>
+                        <th>Тип сплава</th>
+                        <th>Тип структуры</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alloy in alloys %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'alloys:alloy-detail' alloy.slug %}">{{ alloy.name }}</a></td>
+                            <td>{{ alloy.type_of_alloy }}</td>
+                            <td>{{ alloy.type_of_structure }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include "_pagination.html" %}
+        </div>
+    </div>
+</div>
+{% endblock %}
