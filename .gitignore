@@ -1,3 +1,7 @@
 db.sqlite3
 __pycache__
 secrets.json
+db-clear.sqlite3
+db-elem.xlsx
+.~db-elem.xlsx
+db(alloys with elems).sqlite3

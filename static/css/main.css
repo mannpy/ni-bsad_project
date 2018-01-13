@@ -39,6 +39,10 @@ p {
 	margin: 0;
 }
 
+.text-center {
+	text-align: center;
+}
+
 .nav {
 	height: 50px;
 	background-color: #26a69a;

@@ -25,6 +25,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 margin-bottom-10">
+                    {% if alloy.longtimestressrupture_set.all %}
                     <p class="grey">Характеристики:</p><hr>
                     <div class="col-sm-10">
                     <p>Длительная прочность</p>
@@ -47,6 +48,7 @@
                         </tbody>
                     </table>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="col-xs-12">
                     {% for property in alloy.otherproperties_set.all %}

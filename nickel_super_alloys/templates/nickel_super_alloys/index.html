@@ -21,7 +21,7 @@
                 <tbody>
                     {% for alloy in alloys %}
                         <tr>
-                            <td>{{ forloop.counter }}</td>
+                            <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
                             <td><a href="{% url 'alloys:alloy-detail' alloy.slug %}">{{ alloy.name }}</a></td>
                             <td>{{ alloy.type_of_alloy }}</td>
                             <td>{{ alloy.type_of_structure }}</td>
@@ -29,7 +29,8 @@
                     {% endfor %}
                 </tbody>
             </table>
-            {% include "_pagination.html" %}
+            <div class="text-center">{% include "_pagination.html" %}</div>
+
         </div>
     </div>
 </div>
