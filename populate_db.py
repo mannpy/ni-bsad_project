@@ -35,9 +35,10 @@ def add_long_time_stress_rupture(alloy, temperature, life, stress):
     return s
 
 def add_other_property(alloy, **kwargs):
-    o = OtherProperties.objects.get_or_create(alloy=alloy)[0]
-    o.name = kwargs.get('name', None)
-    o.description = kwargs.get("description", None)
+    name = kwargs.get('name', "")
+    description = kwargs.get("description", "")
+    o = OtherProperties.objects.get_or_create(alloy=alloy,
+            name=name, description=description)[0]
     o.save()
     return o
 
@@ -73,31 +74,36 @@ def get_interval(a, b):
 
 
 def populate():
-    # открываю базу-данных
+    # открываем базу-данных
     wb = load_workbook('db-elem.xlsx')
     ws = wb['Лист1']
-    for row in ws.iter_rows(min_row=2, min_col=5, max_col=87, max_row=5):
+    # проходим по всем ячейкам
+    for row in ws.iter_rows(min_row=2, min_col=5, max_col=87, max_row=365):
         for cell in row:
             cr = str(cell.row)
             if cell.column == "E":
+                # добавляем сплав
                 alloy = add_alloy(ws["B" + cr].value,
                     type_of_alloy=ws["C" + cr].value,
                     type_of_structure=ws["D" + cr].value,
                     work_temp=ws["E" + cr].value)
+            # если в ячейке есть значение
             elif cell.value:
                 name, value = ws[cell.column + '1'].value, cell.value
+                # легирующие элементы
                 if cell.column in get_interval("F", "AC"):
                     add_alloying_element(alloy, name, value)
-                elif cell.column in get_interval(30, 33):
+                # другие свойства
+                elif cell.column in get_interval("AD", "AG"):
                     add_other_property(alloy, name=name, description=value)
+                # длительная прочность
                 elif cell.column in get_interval("AH", "CI"):
                     life, temperature  = [int(s) for s in name.split("чσ")]
                     add_long_time_stress_rupture(alloy, temperature, life, stress=int(value))
 
         print(alloy.name, ' added', alloy.slug)
         print(alloy.alloyingelement_set.all().count(), "elements")
-        for c in alloy.alloyingelement_set.all():
-            print(c)
+        print(alloy.otherproperties_set.all().count(), "properties")
         print(alloy.longtimestressrupture_set.all().count(), "long time stress rupture properties")
         print("-"*15)
 

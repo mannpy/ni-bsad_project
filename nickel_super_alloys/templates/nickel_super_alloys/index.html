@@ -5,17 +5,60 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-                <input type="text" class="form-control" placeholder="Сплав:">
+            <form class="" action="" method="GET">
+                <div class="filters">
+                    <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Сплав:" autofocus>
+                        <select name="f1" class="form-control">
+                        <option selected value=""></option>
+                        {% for el in elements %}
+                            <option value="{{ el }}">{{ el }}</option>
+                        {% endfor %}
+                        </select>
+                    <input class="btn btn-primary" type="submit" value="Поиск" />
+                </div>
+                </form>
+
+
+
         </div>
         <div class="col-md-9">
-            <p class="grey">Всего сплавов: {{ alloys.count }}</p>
-            <table class="table table-striped">
+            <p class="grey">Всего сплавов: {{ alloys_count }}</p>
+            <table class="table table-striped" id="table_alloys">
                 <thead>
                     <tr>
                         <th>№</th>
-                        <th>Марка сплава</th>
-                        <th>Тип сплава</th>
-                        <th>Тип структуры</th>
+                        {% spaceless %}
+                        {% for key, link in links %}
+                            <th class="sorted">
+                                <div class="sortoptions">
+                                    {% if key in request.GET.o %}
+                                        <a href="{{ link.0 }}{{ query_link }}" title="Сортировать в другом направлении">
+                                            <i class="fa fa-sort-{{ link.2 }}" aria-hidden="true"></i>{# направление #}
+                                        </a>
+                                    {% endif %}
+                                    {% if link.1 %}{# сслыка для удаления соритровки #}
+                                    <a class="sortremove" href="{{ link.1 }}{{ query_link }}" title="Удалить из сортировки">
+                                        <i class="fa fa-sort" aria-hidden="true"></i>
+                                    </a>
+                                    {% elif key in request.GET.o %}
+                                        {% if query_link %}
+                                        <a class="sortremove" href="?q={{ query }}" title="Удалить из сортировки">
+                                        {% else %}
+                                        <a class="sortremove" href="." title="Удалить из сортировки">
+                                        {% endif %}
+                                        <i class="fa fa-sort" aria-hidden="true"></i>
+                                    </a>
+                                    {% endif %}
+
+                               </div>
+                                <div class="grey">
+                                    <a href="{{ link.0 }}{{ query_link }}">
+                                        {% cycle 'Марка сплава' 'Тип сплава' 'Тип структуры' %}
+                                    </a>
+                                </div>
+                            </th>
+                        {% endfor %}
+                        {% endspaceless %}
                     </tr>
                 </thead>
                 <tbody>

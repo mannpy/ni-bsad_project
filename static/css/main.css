@@ -100,3 +100,19 @@ p {
 .font-size-14 {
 	font-size: 14px;
 }
+
+footer {
+	margin-top: 20px;
+}
+
+.sortoptions {
+display: block;
+padding: 0 10px;
+float: right;
+text-align: right;
+}
+
+
+a.sortremove {
+	margin: 0 5px;
+}
