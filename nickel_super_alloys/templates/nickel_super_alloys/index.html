@@ -5,16 +5,62 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-            <form class="" action="" method="GET">
+            <form action="" method="GET">
                 <div class="filters">
-                    <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Сплав:" autofocus>
-                        <select name="f1" class="form-control">
-                        <option selected value=""></option>
-                        {% for el in elements %}
-                            <option value="{{ el }}">{{ el }}</option>
+                    <div class="form-group">
+                        <label for="typeofalloy"  class="control-label">Сплав:</label>
+                        <input type="text" name="q" id="typeofalloy" value="{{ request.GET.q }}" class="form-control input-sm" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Тип сплава:</label>
+                            <div class="selectdiv">
+                                <select name="ta" class="form-control input-sm">
+                                    <option value=""></option>
+                                {% for toa in type_of_alloys %}
+                                    <option value="{{ toa }}" {% if toa == request.GET.ta %}selected{% endif %}>{{ toa }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                    </div>
+                    <div class="form-group" id="filters">
+                        <label class="control-label" >Фильтры:</label>
+                        {% for i in "123" %}
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="input-group input-group-sm">
+                                    {% with "gtf"|add:i as gtf %}
+                                    {% cycle request.GET.gtf1 request.GET.gtf2 request.GET.gtf3 as gtf_val silent %}
+                                    <input type="text" name="{{ gtf }}"  class="form-control"  value="{{ gtf_val }}">
+                                    <span class="input-group-addon"><=</span>
+                                    {% endwith %}
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="selectdiv">
+                                    {% with "f"|add:i as f %}
+                                    <select name="{{ f }}" class="form-control input-sm">
+                                    <option selected value=""></option>
+                                    {% cycle request.GET.f1 request.GET.f2 request.GET.f3 as f_val silent %}
+                                    {% for el in elements %}
+                                        <option value="{{ el }}" {% if el == f_val %}selected{% endif %}>{{ el }}</option>
+                                    {% endfor %}
+                                    </select>
+                                    {% endwith %}
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="input-group input-group-sm">
+                                    {% with "ltf"|add:i as ltf %}
+                                    {% cycle request.GET.ltf1 request.GET.ltf2 request.GET.ltf3 as ltf_val silent %}
+                                    <span class="input-group-addon"><=</span>
+                                    <input type="text" name="{{ ltf }}" class="form-control input-sm"  value="{{ ltf_val }}">
+                                    {% endwith %}
+                                </div>
+                            </div>
+                        </div>
                         {% endfor %}
-                        </select>
-                    <input class="btn btn-primary" type="submit" value="Поиск" />
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Применить" />
                 </div>
                 </form>
 
@@ -42,7 +88,7 @@
                                     </a>
                                     {% elif key in request.GET.o %}
                                         {% if query_link %}
-                                        <a class="sortremove" href="?q={{ query }}" title="Удалить из сортировки">
+                                        <a class="sortremove" href="?{{ query_link }}" title="Удалить из сортировки">
                                         {% else %}
                                         <a class="sortremove" href="." title="Удалить из сортировки">
                                         {% endif %}

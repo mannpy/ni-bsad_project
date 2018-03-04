@@ -7,6 +7,16 @@ ORDER_VAR = 'o'
 SEARCH_VAR = 'q'
 ORDER_VARS = {'1': 'name', '2': 'type_of_alloy', '3': 'type_of_structure'}
 
+# функция для перевода диапазана фильтра из строкового формата в вещественный
+def float_num(s, lte=False):
+    try:
+        s = float(s)
+    except ValueError:
+        if lte:
+            return 100
+        return 0
+    return s
+
 
 class IndexList(PaginationMixin, ListView):
     model = Alloy
@@ -15,12 +25,44 @@ class IndexList(PaginationMixin, ListView):
     template_name = "nickel_super_alloys/index.html"
 
     def get_queryset(self):
+        # параметры запроса Get
         params = dict(self.request.GET.items())
+        # запрос - все сплавы
         queryset = Alloy.objects.all()
-        self.query = self.request.GET.get(SEARCH_VAR, '')
+        self.query = params.get(SEARCH_VAR, '')
+        # марка сплава
         if self.query:
-            queryset = queryset.filter(name__icontains=params[SEARCH_VAR])
+            queryset = queryset.filter(name__icontains=self.query)
+        self.toa = params.get('ta', '')
+        # тип сплава
+        if self.toa:
+            queryset = queryset.filter(type_of_alloy__startswith=self.toa)
         self.ordering_links = {str(k): ["?o=%s" % k] for k in range(1,4)}
+        # Фильтры
+        # первый фильтр
+        f1 = {'ltf1': float_num(params.get('ltf1', ''), lte=True),
+            'f1': params.get('f1', ''), 'gtf1': float_num(params.get('gtf1', ''))}
+        # второй фильтр
+        f2 = {'ltf2': float_num(params.get('ltf2', ''), lte=True),
+            'f2': params.get('f2', ''), 'gtf2': float_num(params.get('gtf2', ''))}
+        # третий фильтр
+        f3 = {'ltf3': float_num(params.get('ltf3', ''), lte=True),
+            'f3': params.get('f3', ''), 'gtf3': float_num(params.get('gtf3', ''))}
+        if f1['f1']:
+            queryset = queryset.filter(alloyingelement__element__exact=f1['f1'],
+                alloyingelement__value__gt=f1['gtf1'], alloyingelement__value__lte=f1['ltf1'])
+        if f2['f2']:
+            queryset = queryset.filter(alloyingelement__element__exact=f2['f2'],
+                alloyingelement__value__gt=f2['gtf2'], alloyingelement__value__lte=f2['ltf2'])
+        if f3['f3']:
+            queryset = queryset.filter(alloyingelement__element__exact=f3['f3'],
+                alloyingelement__value__gt=f3['gtf3'], alloyingelement__value__lte=f3['ltf3'])
+        # формируем ссылку url для фильтров
+        self.filter_link = ""
+        for filt in (f1, f2, f3):
+            for key, value in filt.items():
+                if value and value not in (0, 100):
+                    self.filter_link += "&%s=%s" % (key, value)
         if ORDER_VAR in params:
             # составляю список для сортировки
             ordering = []
@@ -65,10 +107,19 @@ class IndexList(PaginationMixin, ListView):
         for el in AlloyingElement.objects.all():
             if el.element not in elements:
                 elements.append(el.element)
+        type_of_alloys = []
+        for alloy in Alloy.objects.all():
+            if alloy.type_of_alloy not in type_of_alloys:
+                type_of_alloys.append(alloy.type_of_alloy)
+        context['type_of_alloys'] = type_of_alloys
         context['elements'] = elements
-        context['query'] = self.query
+        context['query_link'] = ""
         if self.query:
             context['query_link'] = "&q=" + self.query
+        if self.toa:
+            context['query_link'] += "&ta=" + self.toa
+        if self.filter_link:
+            context['query_link'] += self.filter_link
         if self.ordering_links:
             context['links'] = sorted(self.ordering_links.items())
         return context

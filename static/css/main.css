@@ -116,3 +116,49 @@ text-align: right;
 a.sortremove {
 	margin: 0 5px;
 }
+
+/* Стиль для селекта */
+.selectdiv:after {
+    content: '\f078';
+    font: normal normal normal 12px/1 FontAwesome;
+    right: 20px;
+    padding-top: 8px;
+    position: absolute;
+	pointer-events: none;
+}
+
+/* IE11 hide native button (thanks Matt!) */
+select::-ms-expand {
+display: none;
+}
+
+.selectdiv select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Add some styling */
+
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: 30px;
+  float: right;
+  color: #333;
+  background-color: #ffffff;
+  background-image: none;
+  -ms-word-break: normal;
+  word-break: normal;
+}
+
+/* конец стили для селекта */
+
+/* фильтры */
+#filters {
+	padding-top: 20px;
+}
+
+#filters .col-xs-4 {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+/* конец фильтры */
